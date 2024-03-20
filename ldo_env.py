@@ -206,6 +206,10 @@ class LDOEnv(gym.Env, CktGraph): #DeviceParams
             terminated = True
         else:
             terminated = False
+
+        if self.transient == False:
+            self.low_load_current_tran_vreg_score = 0
+            self.high_load_current_tran_vreg_score = 0
         
         # print any information you want here    
         print(tabulate(
@@ -551,6 +555,11 @@ class LDOEnv(gym.Env, CktGraph): #DeviceParams
             self.low_load_current_tran_vreg_result_high  = self.low_load_current_tran_vreg_results[idx]
             self.low_load_current_tran_vreg_result_low   = self.low_load_current_tran_vreg_results[-1]
             self.low_load_current_tran_vreg_score = np.min([(self.low_load_current_tran_vreg_result_low - self.low_load_current_tran_vreg_result_high) / (self.low_load_current_tran_vreg_result_low + self.low_load_current_tran_vreg_result_high), 0])
+        else:
+            self.high_load_current_tran_vreg_result_high = 0
+            self.high_load_current_tran_vreg_result_low = 0
+            self.low_load_current_tran_vreg_result_high = 0
+            self.low_load_current_tran_vreg_result_low = 0
 
         """ Quiescent current exclude load current """
         self.Iq = self.OP_M3['id'] + self.OP_M4['id']
