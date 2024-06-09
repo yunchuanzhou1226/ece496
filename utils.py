@@ -782,7 +782,6 @@ def edit_schematic(inst_name, properties,
                 if properties[prop] != '' and inst[prop] != None:
                     inst[prop] = properties[prop]
                     info += "{}: {} ".format(prop, inst[prop])
-            print(info)
             break
     
     # check and save the schematic
@@ -834,3 +833,56 @@ def save_action_to_schematic(CktGraph, action):
 #  40.0684275329113, 1.2994877582788469, 66.32999673485756, 0.34650112867355365,
 #  38.99372512102127, 1.075568437576294, 35.627860367298126, 33.65817591547966,
 #  97.54893034696579])
+
+def replay_best_res():
+    import pickle
+    from tabulate import tabulate
+
+    num_steps = 6000
+    """ Replay the best results """
+    # memory = pkl.load('/groups/czzzgrp/step_models/memory_2024-03-19-02_reward=-0.24_step=6000.pkl')
+    train_memory = Path(__file__).parents[1].joinpath("step_models/saved_memories/memory_2024-03-19-02_reward=-0.24_step=6000.pkl")
+
+    with open(train_memory , 'rb') as pickle_file:
+        memory = pickle.load(pickle_file)
+    rews_buf = memory.rews_buf[:num_steps]
+    info  = memory.info_buf[:num_steps]
+    best_design = np.argmax(rews_buf)
+    best_action = memory.acts_buf[best_design]
+    best_reward = np.max(rews_buf)
+    best_info = memory.info_buf[best_design]
+
+    final_table = tabulate(
+            [
+                ['Drop-out voltage (mV)', best_info['Drop-out voltage (mV)']],
+                # ['Drop-out voltage (mV)', best_agent.env.Vdrop*1e3, best_agent.env.Vdrop_target*1e3],
+
+
+                ['PSRR worst at low load current (dB) < 10kHz', best_info['PSRR worst at low load current (dB) < 10kHz']],
+                ['PSRR worst at low load current (dB) < 1MHz', best_info['PSRR worst at low load current (dB) < 1MHz']],
+                ['PSRR worst at low load current (dB) > 1MHz', best_info['PSRR worst at low load current (dB) > 1MHz']],
+                ['PSRR worst at high load current (dB) < 10kHz', best_info['PSRR worst at high load current (dB) < 10kHz']],
+                ['PSRR worst at high load current (dB) < 1MHz', best_info['PSRR worst at high load current (dB) < 1MHz']],
+                ['PSRR worst at high load current (dB) > 1MHz', best_info['PSRR worst at high load current (dB) > 1MHz']],
+                
+                ['Loop-gain PM at low load current (deg)', best_info['Loop-gain PM at low load current (deg)']],
+                ['Loop-gain PM at high load current (deg)', best_info['Loop-gain PM at high load current (deg)']],
+                
+                ['Iq (uA)', best_info['Iq (uA)']],
+                # ['Iq (uA)', best_agent.env.Iq*1e6, best_agent.env.Iq_target*1e6],
+                ['Cdec (pF)', best_info['Cdec (pF)']],
+                
+                ['high_load_Vreg',best_info["high_load_Vreg"]],
+                ['low_load_Vreg', best_info["low_load_Vreg"]],                
+                
+                # ['Cdec area score', best_agent.env.Cdec_area_score, 'N/A'],
+                ['Reward', best_info['reward']]
+            ],
+        headers=['param'], tablefmt='orgtbl', numalign='right', floatfmt=".2f"
+        )
+    
+    print(final_table)
+
+    # agent.env.step(best_action) # run the simulations
+
+replay_best_res()

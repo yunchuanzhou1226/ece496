@@ -285,7 +285,7 @@ class DDPGAgent:
             if step_save:
                 save_path =Path(__file__).parents[1].joinpath("step_models/")
                 best_reward = np.max(self.memory.rews_buf[:self.total_step])
-                save_list = [4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 9000]
+                save_list = [10, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 9000]
                 if self.total_step in save_list:
                     date = datetime.today().strftime('%Y-%m-%d-%H')
                     model_weight_actor = self.actor.state_dict()

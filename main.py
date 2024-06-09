@@ -85,7 +85,7 @@ agent = DDPGAgent(
 )
 
 # train the agent
-agent.train(num_steps,num_steps)
+agent.train(num_steps=num_steps, step_save=True)
 
 """ Replay the best results """
 memory = agent.memory
@@ -102,8 +102,6 @@ op_results = results.dcOp()
 # saved agent's actor and critic network, save memory buffer and agent
 save = True
 if save == True:
-    
-    save_action_to_schematic(CktGraph(), best_action)
 
     model_weight_actor = agent.actor.state_dict()
     save_name_actor = f"Actor_{CktGraph().__class__.__name__}_{date}_noise={noise_type}_reward={best_reward:.2f}_{GNN().__class__.__name__}_rew_eng={rew_eng}.pth"
@@ -124,4 +122,6 @@ if save == True:
     # save agent
     with open(SCH_PATH.joinpath(f'saved_agents/DDPGAgent_{CktGraph().__class__.__name__}_{date}_noise={noise_type}_reward={best_reward:.2f}_{GNN().__class__.__name__}_rew_eng={rew_eng}.pkl'), 'wb') as agent_file:
         pickle.dump(agent, agent_file)
+
+    save_action_to_schematic(CktGraph(), best_action)
 

@@ -1,0 +1,8 @@
+ipvs:   ERROR: The OA2.2 library directory (/CMC/tools/cadence/PVS-ISR4.15.24.000_lnx86/share/oa/lib/linux_rhel40_64/opt) does not seem to exist.
+ipvs:    INFO: You have OA_UNSUPPORTED_PLAT set to "linux_rhel40" in your environment:
+ipvs:          check that the value provided correspond to a valid OA platform.
+ipvs:          If this value is correct, check your OA installation.
+ipvs:    INFO: Note that OpenAccess (OA) requires running the Configure phase.
+ipvs:          See the "OpenAccess Installation and Configuration Guide" before
+ipvs:          you complete the configuration step. This manual is included with
+ipvs:          the Cadence product documentation.
