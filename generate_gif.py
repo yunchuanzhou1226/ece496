@@ -3,7 +3,6 @@ import matplotlib
 import sys
 import matplotlib.pyplot as plt
 from matplotlib.animation import PillowWriter
-from circuit_graph import GraphLDO
 from pathlib import Path
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
@@ -12,11 +11,13 @@ import numpy as np
 from datetime import datetime
 date = datetime.today().strftime('%Y-%m-%d')
 
-CktGraph = GraphLDO
+sys.path.append('..')
+schematic_path = "Cadence_lib/Simulation/Low_Dropout_With_Diff_Pair/spectre/schematic"
+
 SCH_PATH = (
     Path(__file__)
-    .parents[1]
-    .joinpath(CktGraph.schematic_path)
+    .parents[2]
+    .joinpath(schematic_path)
 )
 num_steps = 10000
 file_name = 'memory_GraphLDO_2024-02-06-22_noise=uniform_reward=-0.26_ActorCriticGCN_rew_eng=True'
